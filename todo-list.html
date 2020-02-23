@@ -1,0 +1,53 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>view example</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <!-- <script src="https://unpkg.com/vuex@2.0.0"></script> -->
+  </head>
+  <body>
+    <div id="app">
+      <form @submit.prevent="addItem">
+        <label>Add a todo</label>
+        <input 
+          placeholder="E.g. Feed the cat" 
+          v-model="newTodoText"
+        >
+        <button >Add</button>
+      </form>
+      <ul>
+        <todo-item 
+          v-for="(item, index) in Items"
+          :key="index"
+          :text="item"
+          @delete="Items.splice(index,1)"
+        ></todo-item>
+      </ul>
+    </div>
+    <script>
+      Vue.component('todo-item', {
+        props: ['text'],
+        template: `
+          <li>
+            {{text}}
+            <button @click="$emit('delete')">remove</button>
+          </li>
+          `
+      })
+      var vm = new Vue({
+        el: '#app',
+        data: {
+          newTodoText: '',
+          Items: ['Mow the lawn']
+        },
+        methods: {
+          addItem () {
+            this.Items.push(this.newTodoText)
+            this.newTodoText = ''
+          }
+        }
+      })
+    </script>
+  </body>
+</html>
